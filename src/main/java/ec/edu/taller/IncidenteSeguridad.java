@@ -13,10 +13,49 @@ public class IncidenteSeguridad {
         this.tipo = tipo;
         this.descripcion = descripcion;
         this.prioridad = prioridad;
-        this.estado = "";
+        this.estado = "PENDIENTE"; // estado inicial de todo incidente nuevo
     }
 
-    
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public String getPrioridad() {
+        return prioridad;
+    }
+
+    public void setPrioridad(String prioridad) {
+        this.prioridad = prioridad;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
     @Override
     public String toString() {
         return codigo + " | " + tipo + " | " + prioridad + " | " + estado;
