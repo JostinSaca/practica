@@ -11,42 +11,68 @@ public class GestorIncidentes {
     private int capacidadMaxima;
 
     public GestorIncidentes(int capacidadMaxima) {
-
-        this.colaIncidentes = null;
+        this.capacidadMaxima = capacidadMaxima;
+        this.colaIncidentes = new LinkedList<>(); // OJO: nunca dejarla en null
     }
 
     public boolean registrarIncidente(IncidenteSeguridad incidente) {
-        // TODO: implementar validaciones y registro en cola
-        return false;
+        // 1. No acepta null
+        if (incidente == null) {
+            return false;
+        }
+        // 2. No acepta código nulo o vacío (incluye solo espacios)
+        String codigo = incidente.getCodigo();
+        if (codigo == null || codigo.trim().isEmpty()) {
+            return false;
+        }
+        // 3. No acepta duplicados por código
+        if (existeIncidente(codigo)) {
+            return false;
+        }
+        // 4. No acepta más si la cola está llena
+        if (colaIncidentes.size() >= capacidadMaxima) {
+            return false;
+        }
+        // 5. Todo correcto: se encola al final (enqueue)
+        return colaIncidentes.offer(incidente);
     }
 
     public boolean existeIncidente(String codigo) {
-        // TODO: verificar si existe un incidente por código
+        if (codigo == null || codigo.trim().isEmpty()) {
+            return false;
+        }
+        for (IncidenteSeguridad i : colaIncidentes) {
+            if (i.getCodigo().equals(codigo)) {
+                return true;
+            }
+        }
         return false;
     }
 
     public IncidenteSeguridad consultarSiguienteIncidente() {
-        // TODO: consultar sin eliminar
-        return null;
+        // peek(): mira el primero SIN eliminarlo; retorna null si está vacía
+        return colaIncidentes.peek();
     }
 
     public IncidenteSeguridad atenderSiguienteIncidente() {
-        // TODO: eliminar el primero de la cola y cambiar estado a ATENDIDO
-        return null;
+        // poll(): saca el primero; retorna null si está vacía
+        IncidenteSeguridad incidente = colaIncidentes.poll();
+        if (incidente != null) {
+            incidente.setEstado("ATENDIDO");
+        }
+        return incidente;
     }
 
     public int contarIncidentesPendientes() {
-        // TODO: retornar cantidad de incidentes pendientes
-        return 0;
+        return colaIncidentes.size();
     }
 
     public int consultarEspaciosDisponibles() {
-        // TODO: retornar capacidad disponible
-        return 0;
+        return capacidadMaxima - colaIncidentes.size();
     }
 
     public List<IncidenteSeguridad> listarIncidentes() {
-        // TODO: retornar copia de los incidentes pendientes sin modificar la cola
-        return new ArrayList<>();
+        // Copia en el mismo orden FIFO; la cola original no se toca
+        return new ArrayList<>(colaIncidentes);
     }
 }
